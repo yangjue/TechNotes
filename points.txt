@@ -128,4 +128,66 @@ assert(ap.get() == 0);         //ap不再拥有原始指针
 scoped_ptr<int>sp2;            //另一个scoped_ptr
 sp2 = sp;                      //赋值操作，无法同过编译！
      
-    
+ C. Archive :
+   MakeFile --> BOOST_LIBS = -L$(BOOST)/lib -lboost_thread-mt -lboost_filesystem -lboost_regex -lboost_serialization
+   class ArRes{
+      public ：
+         ArRes(Res *r) : node1name(r->node1name()), node2name(r->node2name()),r_val(r->val(),cur(r->cur()),
+                         em_ratio(r->em_ratio()) {
+                         }
+         std::string node1name , node2name ;
+         float r_val;
+         float em_ratio;
+   }
+   namespace boost{
+      namespace serialization {
+         template<class Archive>
+         void serialize(Archive &ar, ArRes &res, const unsigned int version ) {
+            ar & res.node1name;
+            ar & res.node2name;
+            ar & res.cur;
+         }
+      }
+   }
+   -----------------------------------------
+   // write 
+   ofstream worst(file_name,ios::binary) ;
+   if (!worst.is_open()) {
+      cout<<"Can't open it "<<endl;
+   }
+   worst.setf(io::fixed);
+   worst<<std::setprecision(6);
+   boost::archive::binary_oarchive oa(worst);
+   for ( auto &res : resList ） {
+      ArRes arRes(res) ;  // write to file 
+      oa<<arRes ;
+    }
+    ----------------
+    // read 
+    ifstream worst(file,ios::binary);
+    boost::archive::binary_iarchive ia(worst);
+    while (1) {
+        try {
+           ArRes arRes;
+           ia>>arRes;
+           worstList.push_back(arRes) ; 
+        } catch (exception &e） {
+             return true;   // return at the end of file
+        }
+    }
+
+
+D. output file format
+   ofstream worst(out_name);
+   if (worst.is_open()) {
+       return false ;
+   }
+   worst.setf(ios::fixed) ;
+   worst<<std::setprecision(2)<<ratio<<space；
+   worst<<std::setprecision(3)<<std::right<<setw(12)<<x<<","<<space<<std::left<<setw(12)<<y<<space;
+   worst<<std::right<<setw(12)<<x<<","<<std::left<<setw(12)<<y<<space;
+   worst<<std::left<<setw(10)<<layerName<<space;
+
+   //  output looks  like : 
+   //#EmRatio (AVG)  #NODE1_POSITION       #NODE2_POSITION  #LAYER    #NET
+   // 6.32            830.000,182.123      830.000,182.123    M2      VDD
