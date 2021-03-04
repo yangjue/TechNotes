@@ -1,0 +1,193 @@
+Pointers
+A. shared_ptr    , is not threadSafe    [ 考虑使用场景 ：1.继承 2.循环引用 （weak_ptr） 3.数组]
+   template<typename T>
+    class shared_ptr {
+    public ：
+        shared_ptr(T* ptr) : mptr(ptr)，_pcount(new int(1) {   } 
+        sharedPtr(const SharedPtr&s)  :_ptr(s._ptr)  , _pcount(s._pcount)  // take care _ptr can be a base class of s.ptr
+        {
+               *(_pcount)++;
+        }
+        T*  mptr;
+        T*  operator->()  { return mptr; } 
+        T*  operator*（）{ return *mptr;}
+         int*  pcount；
+    } 
+   //***********************
+1. 无需虚析构；假设 Bar 是 Foo 的基类，但是 Bar 和 Foo 都没有虚析构。
+
+shared_ptr<Foo> sp1(new Foo); // ref_count.ptr 的类型是 Foo*
+
+shared_ptr<Bar> sp2 = sp1; // 可以赋值，自动向上转型（up-cast）
+
+sp1.reset(); // 这时 Foo 对象的引用计数降为 1
+
+此后 sp2 仍然能安全地管理 Foo 对象的生命期，并安全完整地释放 Foo，因为其 ref_count 记住了 Foo 的实际类型。
+
+2. shared_ptr<void> 可以指向并安全地管理（析构或防止析构）任何对象；muduo::net::Channel class 的 tie() 函数就使用了这一特性，防止对象过早析构，见书 7.15.3 节。
+
+shared_ptr<Foo> sp1(new Foo); // ref_count.ptr 的类型是 Foo*
+
+shared_ptr<void> sp2 = sp1; // 可以赋值，Foo* 向 void* 自动转型
+
+sp1.reset(); // 这时 Foo 对象的引用计数降为 1
+
+此后 sp2 仍然能安全地管理 Foo 对象的生命期，并安全完整地释放 Foo，不会出现 delete void* 的情况，因为 delete 的是 ref_count.ptr，不是 sp2.ptr。
+
+3. 多继承。假设 Bar 是 Foo 的多个基类之一，那么：
+
+shared_ptr<Foo> sp1(new Foo);
+
+shared_ptr<Bar> sp2 = sp1; // 这时 sp1.ptr 和 sp2.ptr 可能指向不同的地址，因为 Bar subobject 在 Foo object 中的 offset 可能不为0。
+
+sp1.reset(); // 此时 Foo 对象的引用计数降为 1
+
+但是 sp2 仍然能安全地管理 Foo 对象的生命期，并安全完整地释放 Foo，因为 delete 的不是 Bar*，而是原来的 Foo*。换句话说，sp2.ptr 和 ref_count.ptr 可能具有不同的值（当然它们的类型也不同）。
+————————————————
+版权声明：本文为CSDN博主「陈硕」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/Solstice/article/details/8547547
+// **********************
+   std::shared_ptr<Person> p1(new Person(1));// Person(1)的引用计数为1
+
+    std::shared_ptr<Person> p2 = std::make_shared<Person>(2);
+
+    p1.reset(new Person(3));// 首先生成新对象，然后引用计数减1，引用计数为0，故析构Person(1)
+                            // 最后将新对象的指针交给智能指针
+
+    std::shared_ptr<Person> p3 = p1;//现在p1和p3同时指向Person(3)，Person(3)的引用计数为2
+
+    p1.reset();//Person(3)的引用计数为1
+    p3.reset();//Person(3)的引用计数为0，析构Person(3)
+
+    std::shared_ptr<int> p4 =new int(1) ; // error
+    // 用原始指针初始化多个shared_ptr 会造成二次销毁
+    int *p5 = new int;
+    std::shared_ptr<int> p6(p5);
+    std::shared_ptr<int> p7(p5);// logic error
+    // 循环引用时一个用shared_ptr<Astruct> 另一个用 weak_ptr<Bstruct> 
+
+1.不具有普通指针的行为，没有重载operator*和->。
+2.它的最大作用在于协助shared_ptr工作，像旁观者那样观测资源的使用情况。
+3.weak_ptr可以从一个shared_ptr或者另一个weak_ptr对象构造，获得资源的观测权。
+4.weak_ptr没有共享资源，它的构造不会引起指针引用计数的增加
+
+weak_ptr使用特点
+1.使用weak_ptr的成员函数use_count()可以观测资源的引用计数，
+另一个成员函数expired()的功能等价于use_count()==0,
+但更快，表示被观测的资源(也就是shared_ptr的管理的资源)已经不复存在。
+2.weak_ptr可以使用一个非常重要的成员函数lock()从被观测的shared_ptr获得一个可用的shared_ptr对象， 
+从而操作资源。
+3.当expired()==true的时候，lock()函数将返回一个存储空指针的shared_ptr
+
+#include <memory>
+#include <iostream>
+ 
+int main()
+{
+   std::weak_ptr<int> w_ptr;
+ 
+   {
+      auto ptr = std::make_shared<int>(10);
+      w_ptr = ptr;
+      // 来查看shared_ptr的引用计数
+      std::cout << "w_ptr.use_count() inside scope: " << w_ptr.use_count() << '\n';
+      // 通过lock()来获取对应的shared_ptr
+      auto obj = w_ptr.lock();
+      std::cout <<  *obj <<std::endl;
+      // expired()来判断对应的object有没有被删除
+      std::cout << "w_ptr.expired() out of scope: " << std::boolalpha << w_ptr.expired() << '\n';
+   
+   }// 出了}之后，shared_ptr被释放，引用计数被置为0.
+ 
+   std::cout << "w_ptr.use_count() out of scope: " << w_ptr.use_count() << '\n';
+   std::cout << "w_ptr.expired() out of scope: " << std::boolalpha << w_ptr.expired() << '\n';
+}
+输出：
+w_ptr.use_count() inside scope: 1
+10
+w_ptr.expired() out of scope: false
+w_ptr.use_count() out of scope: 0
+w_ptr.expired() out of scope: true
+    
+
+B . scoped_ptr和auto_ptr的根本区别在于所有权。auto_ptr特意被设计为指针的所有权是可以被转移的，
+可以在函数之间传递，同一时刻只能有一个auto_ptr管理指针。而scoped_ptr把拷贝构造函数和赋值函数
+都声明为私有的，拒绝了指针所有权的转让，只有scoped_ptr自己能够管理指针，其他任何人都无权访问
+被管理的指针，从而保证了指针的绝对安全。 
+
+auto_ptr<int> ap(new int(10)); //一个int自动指针
+scoped_ptr<int>sp (ap);        //从auto_ptr获得原始指针
+assert(ap.get() == 0);         //原auto_ptr不再拥有指针
+
+ap.rest(new int(20));          //auto_ptr拥有新的指针
+cout <<*ap<<","<<*sp<<endl;    
+
+auto_ptr<int>ap2;
+ap2 = ap;                      //ap2从ap获得原始指针，所有权转移
+assert(ap.get() == 0);         //ap不再拥有原始指针
+scoped_ptr<int>sp2;            //另一个scoped_ptr
+sp2 = sp;                      //赋值操作，无法同过编译！
+     
+ C. Archive :
+   MakeFile --> BOOST_LIBS = -L$(BOOST)/lib -lboost_thread-mt -lboost_filesystem -lboost_regex -lboost_serialization
+   class ArRes{
+      public ：
+         ArRes(Res *r) : node1name(r->node1name()), node2name(r->node2name()),r_val(r->val(),cur(r->cur()),
+                         em_ratio(r->em_ratio()) {
+                         }
+         std::string node1name , node2name ;
+         float r_val;
+         float em_ratio;
+   }
+   namespace boost{
+      namespace serialization {
+         template<class Archive>
+         void serialize(Archive &ar, ArRes &res, const unsigned int version ) {
+            ar & res.node1name;
+            ar & res.node2name;
+            ar & res.cur;
+         }
+      }
+   }
+   -----------------------------------------
+   // write 
+   ofstream worst(file_name,ios::binary) ;
+   if (!worst.is_open()) {
+      cout<<"Can't open it "<<endl;
+   }
+   worst.setf(io::fixed);
+   worst<<std::setprecision(6);
+   boost::archive::binary_oarchive oa(worst);
+   for ( auto &res : resList ） {
+      ArRes arRes(res) ;  // write to file 
+      oa<<arRes ;
+    }
+    ----------------
+    // read 
+    ifstream worst(file,ios::binary);
+    boost::archive::binary_iarchive ia(worst);
+    while (1) {
+        try {
+           ArRes arRes;
+           ia>>arRes;
+           worstList.push_back(arRes) ; 
+        } catch (exception &e） {
+             return true;   // return at the end of file
+        }
+    }
+
+
+D. output file format
+   ofstream worst(out_name);
+   if (worst.is_open()) {
+       return false ;
+   }
+   worst.setf(ios::fixed) ;
+   worst<<std::setprecision(2)<<ratio<<space；
+   worst<<std::setprecision(3)<<std::right<<setw(12)<<x<<","<<space<<std::left<<setw(12)<<y<<space;
+   worst<<std::right<<setw(12)<<x<<","<<std::left<<setw(12)<<y<<space;
+   worst<<std::left<<setw(10)<<layerName<<space;
+
+   //  output looks  like : 
+   //#EmRatio (AVG)  #NODE1_POSITION       #NODE2_POSITION  #LAYER    #NET
+   // 6.32            830.000,182.123      830.000,182.123    M2      VDD
