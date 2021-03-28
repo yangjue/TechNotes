@@ -191,3 +191,46 @@ D. output file format
    //  output looks  like : 
    //#EmRatio (AVG)  #NODE1_POSITION       #NODE2_POSITION  #LAYER    #NET
    // 6.32            830.000,182.123      830.000,182.123    M2      VDD
+   
+   
+    E  how to use json file 
+   x.json  
+   {
+   "ID":120.98
+   "School" : [
+       { "Name":"NanKai",
+         "Area": 9.9,
+         "Building": 300,
+         "Age":17
+        },
+        { "Name":"QingHua",
+          "Area": 10,
+          "Building":310,
+          "Age":18
+        },
+        { "Name":"beijing",
+          "Area": 1.9,
+          "Building":23,
+          "Age":20
+       }
+   ]
+   }
+   // code :
+   namespace pt = boost:property_tree ;
+   pt::ptree root ;
+   try {
+      status = 0 ; 
+      pt::read_json(tech_file,root);
+      float Id = root.get<float>("ID");
+      for ( pt::ptree::value_type &sch : root.get_child("School") ) {
+         string name = sch.second.get<string>("Name");
+         int age = sch.second.get<int>("Age");
+         double area = sch.second.get<int>("Area");
+         int building = sch.second.get<int>(Building");
+      }
+   } catch ( exception &e ) {
+      cout<<e.what()<<endl;
+      status = 1;
+   }
+   
+   
