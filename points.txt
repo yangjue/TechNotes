@@ -193,7 +193,7 @@ D. output file format
    // 6.32            830.000,182.123      830.000,182.123    M2      VDD
    
    
-    E  how to use json file 
+ E.  how to use json file 
    x.json  
    {
    "ID":120.98
@@ -233,4 +233,14 @@ D. output file format
       status = 1;
    }
    
-   
+F. implict conversions 
+class Rational {
+public : 
+  operator double() const ; // better way is to define "double asDouble() const"
+  Rational( double d ) ; //   better way is to " explicit Rational( double d ) " 
+}
+
+original of temporary objects
+1 . pass by value
+2 . reference to const
+3 . return a const obj from function 
