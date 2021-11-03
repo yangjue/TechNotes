@@ -127,7 +127,88 @@ ap2 = ap;                      //ap2从ap获得原始指针，所有权转移
 assert(ap.get() == 0);         //ap不再拥有原始指针
 scoped_ptr<int>sp2;            //另一个scoped_ptr
 sp2 = sp;                      //赋值操作，无法同过编译！
-     
+---------- update -----------
+weak_ptr 用于替换auto_ptr . 当weak_ptr 指向shared_ptr后不会影响 share_ptr 所管理的内存的生命周期,doesn't support copy construct 。 weak_ptr 可以解决循环引用的问题 当出现两个share_ptr 相互引用的时候，将
+其中一个改作weak_ptr. ( father node points to child node , child node also need to pointer to its father ) 
+class GFG {
+
+public:
+    float x, y;
+
+    // Parameterized Constructor
+    GFG(float x, float y)
+        : x(x), y(y)
+    {
+        cout<<"construct : x: "<<x<<"  y: "<<y<<endl;
+    }
+    // Copy Constructor
+    GFG(const GFG& GFG)
+        : x(GFG.x), y(GFG.y)
+    {
+        cout << "Copied" << endl;
+    }
+    ~GFG()
+    {
+        cout<<"destructor "<<endl;
+    }
+    void vals() {
+        cout<<"vals x : "<<x<<" y: "<<y<<endl; return ;
+    }
+};
+
+    weak_ptr<vector<double>> wptr ;
+    weak_ptr<GFG> wptr2  ;
+    {
+        auto sh_vec = make_shared<vector<double>>() ;
+        wptr = sh_vec;
+        auto x = make_shared<GFG>(222,333);
+        wptr2 = x ;
+        cout<<x.use_count()<<endl;
+        vector<double> *vec_point = sh_vec.get() ;
+        cout<<sh_vec.use_count()<<endl;
+        (*vec_point).push_back(12.3);
+        (*vec_point).push_back(1.3);
+        (*vec_point).push_back(11.33);
+        auto y = sh_vec ;
+        cout<<sh_vec.use_count()<<endl;
+
+        (*vec_point).push_back(99.8);
+        (*vec_point).push_back(9.8);
+
+        for ( auto x : *vec_point) {
+            cout<<" element : "<<x<<endl;
+        }
+
+    }
+    cout<<"leave the shared_ptr block "<<endl;
+
+    {
+        cout<<" test unique_ptr "<<endl;
+        unique_ptr<int> pInt(new int(5));
+        cout << *pInt;
+
+        unique_ptr<int> pInt2 = std::move(pInt);    // 转移所有权
+        //cout << *pInt << endl; // 出错，pInt为空
+        cout << *pInt2 << endl;
+        unique_ptr<int> pInt3(std::move(pInt2));
+        cout<<"checking contruct "<<endl;
+        vector<unique_ptr<GFG>> unPtr_vec ;
+
+        unique_ptr<GFG> u = std::make_unique<GFG> (9,10) ; // c++17
+        unique_ptr<GFG>& ref  = u ;
+        ref->vals();
+        cout<<"add "<<endl;
+        unPtr_vec.push_back(std::move(u));
+        //unPtr_vec.push_back(u);  doesn't support copy construct
+        unPtr_vec.emplace_back(std::move(std::make_unique<GFG>(9,8.8))) ;
+        unPtr_vec.push_back(std::make_unique<GFG>(9.8,3.4)) ;
+        for ( auto &e : unPtr_vec) {
+            e->vals();
+        }
+
+    }
+
+     ------------------ end -------------------
  C. Archive :
    MakeFile --> BOOST_LIBS = -L$(BOOST)/lib -lboost_thread-mt -lboost_filesystem -lboost_regex -lboost_serialization
    class ArRes{
@@ -255,18 +336,12 @@ double -> float
 
 1. cp = static_cast<type*> (s)
 if (cp) 
-   cout<<"it's a squarre"<<endl;
+   cout<<"it's a square"<<endl;
 const_cast cast away const or volatile 
 2. const int * const p ;  [第一个const只是底层const ,表明p指向的地址是const.第二个const 表明p指针对象本身是const，指针是对象，引用是别名] [第二个const，即指针对象本身的属性会限制\影响其在作为左值时的用法] const_cast 只是cast away 对象底层的 const性质 
 
-H. implict conversions 
-class Rational {
-public : 
-  operator double() const ; // better way is to define "double asDouble() const"
-  Rational( double d ) ; //   better way is to " explicit Rational( double d ) " 
-}
+H .   std::cout << std::boolalpha
+              << "NL boolalpha true  : " << true << "\n"
+              << "NL boolalpha false : " << false << "\n"
+              << std::noboolalpha;
 
-I. original of temporary objects
-1 . pass by value
-2 . reference to const
-3 . return a const obj from function 
