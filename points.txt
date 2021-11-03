@@ -258,3 +258,15 @@ if (cp)
    cout<<"it's a squarre"<<endl;
 const_cast cast away const or volatile 
 2. const int * const p ;  [第一个const只是底层const ,表明p指向的地址是const.第二个const 表明p指针对象本身是const，指针是对象，引用是别名] [第二个const，即指针对象本身的属性会限制\影响其在作为左值时的用法] const_cast 只是cast away 对象底层的 const性质 
+
+H. implict conversions 
+class Rational {
+public : 
+  operator double() const ; // better way is to define "double asDouble() const"
+  Rational( double d ) ; //   better way is to " explicit Rational( double d ) " 
+}
+
+I. original of temporary objects
+1 . pass by value
+2 . reference to const
+3 . return a const obj from function 
