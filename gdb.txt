@@ -1,0 +1,11 @@
+(gdb) thread apply 1 continue           // 1号线程执行continue命令。
+(gdb) thread apply 1 2 continue         //1号和二号线程执行continue命令
+(gdb) thread apply all continue         //所有的线程执行continue命令
+
+ 锁定执行的线程，命令格式展示如下：
+set scheduler-locking [mode]
+
+该命令表示当调试一个线程时其他的线程是否继续执行。mode 有三种选项，分别是：off、on、step。
+当 mode 为 off 时，表示不锁定线程，这是 GDB 的默认选项；
+当 mode 的值为 on 时，表示锁定其他的线程，只有当前线程执行。
+当 mode 为 step 时，表示如果使用 step 单步执行，所有的线程都会运行
