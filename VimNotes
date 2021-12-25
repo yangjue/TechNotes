@@ -1,0 +1,97 @@
+quit Vim 
+set tags = tags
+vimgrep/main/ src/*.c
+bufdo! %s/Find/Rep/ge|update
+syntax on 
+set foldmethod = manual indent syntax 
+bufdo! %s/j-\z\d\+/\=submatch(0)>30 ? submatch(0)+1:submatch(0)/ge|update
+ctrl w gf   // open file in new window
+
+
+register : 
+1 . Vim 有自己的 unnamed （无名寄存器）或者说默认寄存器，可以通过 "" 来访问
+2 . Vim 提供 26 个英文字母命名的有名寄存器
+3 . 数字寄存器 存放yank 的历史内容 最新的放在0 中
+4 .  “#   轮换文件名 name of the alternate file    , 使用 ctrl + ^
+      “%  当前文件名 name of the current file 
+        "=  是表达式寄存器  ， 使用比较复杂 在inert mode 下， ctrl r =  然后输入2+2<enter> 或者system('ls') <enter>
+        cd %:p:h 
+        lcd %:p:h
+5 .  写寄存器 :let @+=@%
+6 .  修改寄存器w 方法 let @w='content'   // two ' ' are needed  
+     或者  用大写W追加
+7.  移动  ：
+        显示文件49% 的位置在屏幕中间
+        zz 将光标所在行显示在屏幕中间
+        zb                                        底部
+        zt                                         头部
+
+
+
+implict conversions 
+class Rational {
+public : 
+  operator double() const ; // better way is to define "double asDouble() const"
+  Rational( double d ) ; //   better way is to " explicit Rational( double d ) " 
+}
+
+original of temporary objects
+1 . pass by value
+2 . reference to const
+3 . return a const obj from function 
+
+
+    std::cout << std::boolalpha
+              << "NL boolalpha true  : " << true << "\n"
+              << "NL boolalpha false : " << false << "\n"
+              << std::noboolalpha;
+
+lock() function
+
+shared_ptr<Foo> spFoo = wpPtr.lock();
+
+if(spFoo) {
+    spFoo->DoSomething();
+}
+expired() function
+
+if(!wpPtr.expired())
+{
+    shared_ptr<Foo> spFoo = wpPtr.lock();
+    spFoo->DoSomething();
+}
+当weak_ptr 指向shared_ptr后不会影响 share_ptr 所管理的内存的生命周期。
+
+
+using PString = std::share_ptr<std::string> 
+后置返回类型（tailng-return-type）
+
+template Ret adding_func(const Lhs &lhs, const Rhs &rhs) { return lhs + rhs ; } 
+
+6、空指针常量 nullptr
+　　NULL通常在C语言中预处理宏定义为(void*)0或者0，这样0就有int型常量和空指针的双重身份。
+但是C++03中只允许0宏定义为空指针常量，这就会造成如下的错误：
+void foo(int n) ; 
+void foo(char* cArr) ; 
+
+cat filec | awk ' $3 == "swu" { print $3 } ' | wc -lw
+grep -r -n "name" --exclude  file  ./*
+grep -c 'warning\|error'  log 
+
+awk  -F  ':'    ' { print $1“\t" $7} '
+:%!column -t
+:%!sort -k2nr    // -k2  indicates second column ; r  indicates reverse
+well tap cells  闩锁效应（latch-up）
+endcap cell 
+tie cell
+antenna cell
+filler cell
+decap cell
+
+https://github.com/xjq7/books
+https://github.com/tongji4m3/Algorithm-fourth-edition/tree/master/1.4
+
+1 .使用sort 对文件排序。
+2. 查找与awk联合使用
+3. grep 
+ 
