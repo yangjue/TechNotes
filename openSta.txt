@@ -1,0 +1,58 @@
+initStaApp(int &argc,
+	   char *argv[],
+	   Tcl_Interp *interp)
+{
+  initSta();
+  Sta *sta = new Sta;
+  Sta::setSta(sta);
+  sta->makeComponents();    // init sta 
+  sta->setTclInterp(interp);
+  int thread_count = parseThreadsArg(argc, argv);
+  sta->setThreadCount(thread_count);
+   .....
+}
+file : app\Main.cc
+
+Sta::makeComponents()
+{
+  makeReport();
+  makeDebug();
+  makeUnits();
+  makeNetwork();   // ConcreateNetWork 
+  makeSdc();
+  makeLevelize();
+  makeParasitics();
+  makeCorners();
+  makeArcDelayCalc();
+  makeGraphDelayCalc();
+  makeSim();
+  makeSearch();
+  makeLatches();
+  makeClkNetwork();
+  makeSdcNetwork();
+  makeReportPath();
+  makePower();
+  setCmdNamespace(CmdNamespace::sdc);
+  updateComponentsState();
+
+  makeObservers();
+  // This must follow updateComponentsState.
+  corners_->makeParasiticAnalysisPtsSingle();
+  setThreadCount(defaultThreadCount());
+}
+class ConcreteNetwork : public NetworkReader    // include/sta/ConcreteNetWork.hh
+
+file : search\Sta.cc
+
+ConcreteNetwork::ConcreteNetwork() :
+  NetworkReader(),
+  top_instance_(nullptr),
+  link_func_(nullptr)
+{
+}
+file : network/ConcreteNetwork.cc
+
+tcl/*.i file c++ function used as interface 
+
+
+
