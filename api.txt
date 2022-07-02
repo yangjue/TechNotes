@@ -1,0 +1,17 @@
+#include "data_time/posix_time/posix_time.hpp"
+
+boost::posix_time::ptime p = boost::posix_time::second_clock::local_time();
+header<<"#Data “<<P<<endl;
+------------
+using namespace boost::filesystem 
+exist(fileName)
+
+boost::filesystem::remove(file) ; 
+
+report.open(name,fstream::out|fstream::app);
+
+report<<std::right<<std::fixed<<std::setprecision(4)
+report<<std::setprecision(4)<<std::scientific<<val;
+
+
+
