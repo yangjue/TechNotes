@@ -1,4 +1,5 @@
 cat filec | awk ' $3 == "swu" { print $3 } ' | wc -lw
+awk  -F  ':'    ' { print $1“\t" $7} '
 grep -r -n "name" --exclude  file  ./*
 grep -c 'warning\|error'  log 
 
