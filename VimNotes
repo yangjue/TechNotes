@@ -74,11 +74,8 @@ template Ret adding_func(const Lhs &lhs, const Rhs &rhs) { return lhs + rhs ; }
 void foo(int n) ; 
 void foo(char* cArr) ; 
 
-cat filec | awk ' $3 == "swu" { print $3 } ' | wc -lw
-grep -r -n "name" --exclude  file  ./*
-grep -c 'warning\|error'  log 
 
-awk  -F  ':'    ' { print $1“\t" $7} '
+
 :%!column -t
 :%!sort -k2nr    // -k2  indicates second column ; r  indicates reverse
 well tap cells  闩锁效应（latch-up）
