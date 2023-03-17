@@ -7,6 +7,8 @@ using namespace boost::filesystem
 exist(fileName)
 
 boost::filesystem::remove(file) ; 
+boost::rename(file,newFile);
+boost::permissions(newFile,boost::perms::owner_all | boost::perms::group_all | boost::perms::others_all) ; 
 
 report.open(name,fstream::out|fstream::app);
 
