@@ -1,0 +1,9 @@
+// note : git apply --check  a.patch 
+
+git am  a.patch 
+if has confilcts use :
+git apply --reject a.patch   // gens *.rej  , then open and edit it 
+git add ..
+git am --resolved  // or git am --continue 
+
+git checkout -b newName --track origin/name
