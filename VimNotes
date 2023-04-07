@@ -28,19 +28,6 @@ register :
 
 
 
-implict conversions 
-class Rational {
-public : 
-  operator double() const ; // better way is to define "double asDouble() const"
-  Rational( double d ) ; //   better way is to " explicit Rational( double d ) " 
-}
-
-original of temporary objects
-1 . pass by value
-2 . reference to const
-3 . return a const obj from function 
-
-
     std::cout << std::boolalpha
               << "NL boolalpha true  : " << true << "\n"
               << "NL boolalpha false : " << false << "\n"
