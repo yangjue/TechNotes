@@ -347,10 +347,17 @@ H .   std::cout << std::boolalpha
 
 I . function template 
 
-    void flat1(double , function<int(double)> func ){
-       int val = func(double) ; 
+    void flat1(double d, function<int(double)> func ){
+       int val = func(d) ; 
        return ; 
     }
+    
+    template<typename T>
+    void t_flat(T t,function<void(T)> func) {
+       func(t) ; 
+       return ;
+    }
+    
     
      void main() {
        double d = 0.5 ; 
@@ -358,6 +365,9 @@ I . function template
            return std::floor(d) ; 
        };
        flat1(d,flatLambda) ; 
+       
+       // method 2
+       t_flat<double>(0.4,flatLambda) ;
        return ; 
      }
     
