@@ -297,7 +297,7 @@ D. output file format
    ]
    }
    // code :
-   namespace pt = boost:property_tree ;
+   namespace pt = boost::roperty_tree ;
    pt::ptree root ;
    try {
       status = 0 ; 
@@ -345,3 +345,20 @@ H .   std::cout << std::boolalpha
               << "NL boolalpha false : " << false << "\n"
               << std::noboolalpha;
 
+I . function template 
+
+    void flat1(double , function<int(double)> func ){
+       int val = func(double) ; 
+       return ; 
+    }
+    
+     void main() {
+       double d = 0.5 ; 
+       auto flatLambda = [](double d)->int {
+           return std::floor(d) ; 
+       };
+       flat1(d,flatLambda) ; 
+       return ; 
+     }
+    
+    
