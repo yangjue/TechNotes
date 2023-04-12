@@ -7,3 +7,6 @@ git add ..
 git am --resolved  // or git am --continue 
 
 git checkout -b newName --track origin/name
+
+Change commit's date : 
+  git commit --amend --no-edit --date "17/08/22 20:19:19 +0200"
