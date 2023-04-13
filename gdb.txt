@@ -9,3 +9,25 @@ set scheduler-locking [mode]
 当 mode 为 off 时，表示不锁定线程，这是 GDB 的默认选项；
 当 mode 的值为 on 时，表示锁定其他的线程，只有当前线程执行。
 当 mode 为 step 时，表示如果使用 step 单步执行，所有的线程都会运行
+
+  shell gdb interactative debug 
+  1.  main() {  // test.out
+         // create 2 threads ,then run it
+       }
+    $ps aux | grep 'test'
+    1938 0.0 0.0 22596 528 ..... test
+    
+    $ps -aL
+    PID  LWP TTY    TIME  CMD
+    1938 1938 pts/0  ...  test     
+    1938 1939 pts/0  ...  test
+    1938 1940 pts/0  ...  test
+    
+    pstree -p 1938 ( main thread ID ) 
+    test(1938) ---- (test)(1939)
+                |-- (test)(1940) 
+    线程栈结构的查看
+    1. 获取线程ID
+    2. ps stack ID
+    gdb attach 4400 ( 4400 main thread）
+    
