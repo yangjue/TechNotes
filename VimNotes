@@ -24,45 +24,9 @@ register :
         显示文件49% 的位置在屏幕中间
         zz 将光标所在行显示在屏幕中间
         zb                                        底部
-        zt                                         头部
-
-
-
-    std::cout << std::boolalpha
-              << "NL boolalpha true  : " << true << "\n"
-              << "NL boolalpha false : " << false << "\n"
-              << std::noboolalpha;
-
-lock() function
-
-shared_ptr<Foo> spFoo = wpPtr.lock();
-
-if(spFoo) {
-    spFoo->DoSomething();
-}
-expired() function
-
-if(!wpPtr.expired())
-{
-    shared_ptr<Foo> spFoo = wpPtr.lock();
-    spFoo->DoSomething();
-}
-当weak_ptr 指向shared_ptr后不会影响 share_ptr 所管理的内存的生命周期。
-
-
-using PString = std::share_ptr<std::string> 
-后置返回类型（tailng-return-type）
-
-template Ret adding_func(const Lhs &lhs, const Rhs &rhs) { return lhs + rhs ; } 
-
-6、空指针常量 nullptr
-　　NULL通常在C语言中预处理宏定义为(void*)0或者0，这样0就有int型常量和空指针的双重身份。
-但是C++03中只允许0宏定义为空指针常量，这就会造成如下的错误：
-void foo(int n) ; 
-void foo(char* cArr) ; 
-
-
-
+        zt                                        顶部
+        
+        
 :%!column -t
 :%!sort -k2nr    // -k2  indicates second column ; r  indicates reverse
 well tap cells  闩锁效应（latch-up）
