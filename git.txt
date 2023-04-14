@@ -10,3 +10,6 @@ git checkout -b newName --track origin/name
 
 Change commit's date : 
   git commit --amend --no-edit --date "17/08/22 20:19:19 +0200"
+
+git diff branch1 branch2 file
+git diff branch1 brnach2 --stat 
