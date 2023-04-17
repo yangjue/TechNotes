@@ -21,3 +21,7 @@ https://github.com/tongji4m3/Algorithm-fourth-edition/tree/master/1.4
 1 .使用sort 对文件排序。
 2. 查找与awk联合使用
 3. grep 
+
+find ./  -name '*.cc'  -mtime 0 // 0 : today, hours .  -mmin -30 // 30 min in recent
+                                // mtime:  change content in file by vi or redirection 
+                                // ctime:  change by mv 
