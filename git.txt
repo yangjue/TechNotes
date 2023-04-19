@@ -11,7 +11,8 @@ git checkout -b newName commitId
 1. git checkout commitId , 2 git switch -c newName 
 
 Change commit's date : 
-  git commit --amend --no-edit --date "17/08/22 20:19:19 +0200"
+  git commit --amend --no-edit --date "17/08/22 20:19:19 +0200"  // git commit --amend --date=now
+  
 
 git diff branch1 branch2 file
 git diff branch1 brnach2 --stat 
