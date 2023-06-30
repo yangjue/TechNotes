@@ -10,17 +10,25 @@ git checkout -b newName --track origin/name   OR  git branch --track modlegen
 git checkout -b newName commitId/tag
 1. git checkout commitId , 2 git switch -c newBranch [git switch -c tagBranch tag (create a branch “tagBranch” by tag)] 
 
-note on [tag] 
+[note] : tag 
    git tag v1.6 ;  git tag -a v1.6 -m "publish v1.6 version"  
    git show v1.6
    git tag -a v1.0.0 -m "Release version 1.0.0" HEAD/commitId
    delete tag :  git tag -d v1.6
    git push origin :refs/tags/{标签名}
    usually tags won't be pushed to remote , if want to do it , use "git push origin atagName " or " git push origin --tags 
+   git tag  // list all tags ;   [-l]  "v1.*"  // list  tags with "v1."
+
 Change commit's date : 
   git commit --amend --no-edit --date "17/08/22 20:19:19 +0200"  // git commit --amend --date=now
   
 
 git diff branch1 branch2 file
 git diff branch1 brnach2 --stat 
+
+git log --merges  // --no-merges 
+git log branch1 ^branch2  // show what contained in branch1 but not in branch2
+git log branch1..branch2
+git log branch1...branch2
+[note] : show diffs in file use git diff ; show diffs in commits use git log 
 
