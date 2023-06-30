@@ -7,9 +7,16 @@ git add ..
 git am --resolved  // or git am --continue 
 
 git checkout -b newName --track origin/name   OR  git branch --track modlegen
-git checkout -b newName commitId
-1. git checkout commitId , 2 git switch -c newName 
+git checkout -b newName commitId/tag
+1. git checkout commitId , 2 git switch -c newBranch [git switch -c tagBranch tag (create a branch “tagBranch” by tag)] 
 
+note on [tag] 
+   git tag v1.6 ;  git tag -a v1.6 -m "publish v1.6 version"  
+   git show v1.6
+   git tag -a v1.0.0 -m "Release version 1.0.0" HEAD/commitId
+   delete tag :  git tag -d v1.6
+   git push origin :refs/tags/{标签名}
+   usually tags won't be pushed to remote , if want to do it , use "git push origin atagName " or " git push origin --tags 
 Change commit's date : 
   git commit --amend --no-edit --date "17/08/22 20:19:19 +0200"  // git commit --amend --date=now
   
