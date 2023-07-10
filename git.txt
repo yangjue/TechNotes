@@ -18,6 +18,10 @@ git checkout -b newName commitId/tag
    git push origin :refs/tags/{标签名}
    usually tags won't be pushed to remote , if want to do it , use "git push origin atagName " or " git push origin --tags 
    git tag  // list all tags ;   [-l]  "v1.*"  // list  tags with "v1."
+   substitute old tags
+   git tag -f new-tag old-tag 
+   git tag -d old-tag
+   
 
 Change commit's date : 
   git commit --amend --no-edit --date "17/08/22 20:19:19 +0200"  // git commit --amend --date=now
