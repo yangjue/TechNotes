@@ -22,6 +22,6 @@ https://github.com/tongji4m3/Algorithm-fourth-edition/tree/master/1.4
 2. 查找与awk联合使用
 3. grep 
 
-find ./  -name '*.cc'  -mtime 0 // 0 : today, hours .  -mmin -30 // 30 min in recent
+find ./  -name '*.cc'  -mtime 0 // 0 : today, hours .  -mmin -30 // 30 min in recent   if  +5  -30  means 30> time >5 min
                                 // mtime:  change content in file by vi or redirection 
                                 // ctime:  change by mv 
