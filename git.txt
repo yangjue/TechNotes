@@ -32,7 +32,7 @@ git diff branch1 brnach2 --stat
 
 git log --merges  // --no-merges 
 git log branch1 ^branch2  // show what contained in branch1 but not in branch2
-git log branch1..branch2
-git log branch1...branch2
+git log branch1..branch2  // show commits in branch2 that is not exist in branch1 , aka git log working..main make user know what commits the working branch misses 
+git log branch1...branch2  // show all diffs between branch1 and branch2 
 [note] : show diffs in file use git diff ; show diffs in commits use git log 
 
