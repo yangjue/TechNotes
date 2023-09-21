@@ -24,8 +24,8 @@ register :
         显示文件49% 的位置在屏幕中间
         zz 将光标所在行显示在屏幕中间
         zb                                        底部
-        zt                                        顶部
-        
+        zt                                        顶部 
+8.   3gt [go to the 3rd tab] ,  gt [go to next tab]
         
 :%!column -t
 :%!sort -k2nr    // -k2  indicates second column ; r  indicates reverse
