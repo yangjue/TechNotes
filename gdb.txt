@@ -1,3 +1,26 @@
+[break]
+b opt.cc:467 if name[0] =='n' 
+example 1 :
+cond 3 i==3   # means : for breakpoint3 it breaks when i==3
+ignore break_number count # like ignore 2  1000 , means for breakpoint 2 ignore 1000 times
+commands 1 
+> p var
+>c
+>end
+example 2 :
+break foo if x>0
+commands
+silent
+printf "x is %d\n",x
+set x = y + 4
+cont
+end
+
+[watch]  ( rwatch ) 
+watch localvar
+watch *(float*) address
+
+[thread]
 (gdb) thread apply 1 continue           // 1号线程执行continue命令。
 (gdb) thread apply 1 2 continue         //1号和二号线程执行continue命令
 (gdb) thread apply all continue         //所有的线程执行continue命令
@@ -30,4 +53,5 @@ set scheduler-locking [mode]
     1. 获取线程ID
     2. ps stack ID
     gdb attach 4400 ( 4400 main thread）
+
     
