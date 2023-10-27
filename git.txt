@@ -21,7 +21,7 @@ git checkout -b newName commitId/tag
    substitute old tags
    git tag -f new-tag old-tag 
    git tag -d old-tag
-   
+   sometimes these commands don't work : git tag --edit v1.0  ; git branch --contains v1.0 ; git tag -l "v1*"
 
 Change commit's date : 
   git commit --amend --no-edit --date "17/08/22 20:19:19 +0200"  // git commit --amend --date=now
@@ -35,4 +35,5 @@ git log branch1 ^branch2  // show what contained in branch1 but not in branch2
 git log branch1..branch2  // show commits in branch2 that is not exist in branch1 , aka git log working..main make user know what commits the working branch misses 
 git log branch1...branch2  // show all diffs between branch1 and branch2 
 [note] : show diffs in file use git diff ; show diffs in commits use git log 
+git log --since "3 weeks ago"  ( 2 days ago )   --since "Apr 3 2013" --until "Apr 28 2013"
 
