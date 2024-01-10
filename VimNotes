@@ -26,6 +26,9 @@ register :
         zb                                        底部
         zt                                        顶部 
 8.   3gt [go to the 3rd tab] ,  gt [go to next tab]
+9. advance editing
+     :/^Part1/,/^Part2/ g /^Chapter/ .+2w>>begin | t$
+     :g/SYNTAX/.,/DESCR/-1 move /PARAM/-1
         
 :%!column -t
 :%!sort -k2nr    // -k2  indicates second column ; r  indicates reverse
