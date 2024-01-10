@@ -29,6 +29,9 @@ register :
 9. advance editing
      :/^Part1/,/^Part2/ g /^Chapter/ .+2w>>begin | t$
      :g/SYNTAX/.,/DESCR/-1 move /PARAM/-1
+     %s/.*/\U&/g   // change char to Uper case
+     :g/.*/mo0    // reverse the order of lines in a file
+      :g/Paid in full/s/$/ Overdue/            // append " Overdue" to lines
         
 :%!column -t
 :%!sort -k2nr    // -k2  indicates second column ; r  indicates reverse
