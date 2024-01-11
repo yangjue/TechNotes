@@ -32,6 +32,7 @@ register :
      %s/.*/\U&/g   // change char to Uper case
      :g/.*/mo0    // reverse the order of lines in a file
       :g/Paid in full/s/$/ Overdue/            // append " Overdue" to lines
+      :g/DESCRIPTION/,/PARAMETERS/-1d          //  -1 indicates the line above line marked with /PARAMETERS/
         
 :%!column -t
 :%!sort -k2nr    // -k2  indicates second column ; r  indicates reverse
