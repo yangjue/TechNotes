@@ -37,4 +37,5 @@ git log branch1...branch2  // show all diffs between branch1 and branch2
 [note] : show diffs in file use git diff ; show diffs in commits use git log 
 git log --since "3 weeks ago"  ( 2 days ago )   --since "Apr 3 2013" --until "Apr 28 2013"
 git log --oneline -S "keyword"  /  --grep "msg" /  --author "name"
+git grep "wordsInFiles" 
 
